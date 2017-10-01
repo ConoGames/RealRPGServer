@@ -125,16 +125,18 @@ namespace ConoNetworkLibrary
 
             Array.Copy(BitConverter.GetBytes(dataLen), dataLenByte, 4);
 
-            socket.Send(dataLenByte);
+            byte[] wholeData = new byte[dataLenByte.Length + data.Length];
+            System.Buffer.BlockCopy(dataLenByte, 0, wholeData, 0, dataLenByte.Length);
+            System.Buffer.BlockCopy(data, 0, wholeData, dataLenByte.Length, data.Length);
 
-			socket.Send(data, 0, dataLen, SocketFlags.None);
-		}
+            socket.Send(wholeData, 0, wholeData.Length, SocketFlags.None);
+        }
 
-		/**
+        /**
 		@drief
 		owner setter
 		*/
-		public void SetOwner(IConoOwner owner)
+        public void SetOwner(IConoOwner owner)
 		{
 			this.owner = owner;
 		}
