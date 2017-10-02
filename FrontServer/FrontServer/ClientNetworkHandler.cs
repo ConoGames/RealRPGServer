@@ -21,6 +21,8 @@ namespace FrontServer
                 return;
             }
 
+            FrontSingleton.Instance.
+
 			FrontUser user = new FrontUser(connect);
 			user.Connect = connect;
 			connect.SetOwner(user);

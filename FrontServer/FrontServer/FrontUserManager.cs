@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FrontServer
 {
-    public class FrontUserManager : OwnerManager
+    public class FrontUserManager : UserManager
     {
         private Dictionary<string, FrontUser> loginTokenDict = new Dictionary<string, FrontUser>();
 
@@ -12,7 +12,7 @@ namespace FrontServer
 		@brief
 		필요한 객체를 생성하는 생성자. 
 		*/
-        public FrontUserManager(int deleteTime) : base(deleteTime)
+        public FrontUserManager()
         {
             
         }

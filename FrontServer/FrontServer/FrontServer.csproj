@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrontSingleton.cs" />
     <Compile Include="ClientNetworkHandler.cs" />
     <Compile Include="DJLogin.cs" />
     <Compile Include="FrontDefines.cs" />

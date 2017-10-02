@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
 using ConoNetworkLibrary;
 
@@ -42,7 +41,19 @@ namespace FrameworkNamespace
                 Console.WriteLine("already exist sessionId - " + sessionId);
 
                 return null;
-			}
+            }
+
+            return session;
+        }
+
+        public Session AddSession(Session session)
+        {
+            if (sessionDict.TryAdd(session.SessionId, session) == false)
+            {
+                Console.WriteLine("already exist sessionId - " + session.SessionId);
+
+                return null;
+            }
 
             return session;
         }
@@ -54,7 +65,7 @@ namespace FrameworkNamespace
             timeoutQueue.Enqueue(session);
         }
 
-		public void processDelete()
+		public void ProcessDelete()
 		{
 			//Iterator iterator = timeoutQueue.iterator();
 			long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
@@ -65,18 +76,7 @@ namespace FrameworkNamespace
             {
                 if (session.DisconnectTime + deleteTime > currentTime)
                 {
-                    Session removeSession;
-                    if (sessionDict.TryRemove(session.SessionId, out removeSession))
-                    {
-                        timeoutQueue.TryDequeue(out session);
-
-                        sessionTimeOut(session);
-                    }
-                    else
-                    {
-                        Console.WriteLine("timeout but not exist in sessionDict - sessionId : " + session.SessionId);
-                        return;
-                    }
+                    SessionTimeOut(session);
                 }
                 else
                 {
@@ -85,9 +85,25 @@ namespace FrameworkNamespace
             }
 		}
 
-		public void sessionTimeOut(Session session)
+		public void SessionTimeOut(Session session)
         {
-            
+            Session removeSession;
+            if (sessionDict.TryRemove(session.SessionId, out removeSession))
+            {
+                if(timeoutQueue.TryDequeue(out session))
+                {
+                    
+                }
+                else
+                {
+                    Console.WriteLine("timeout but not exist in timeoutQueue - sessionId : " + session.SessionId);
+                }
+                
+            }
+            else
+            {
+                Console.WriteLine("timeout but not exist in sessionDict - sessionId : " + session.SessionId);
+            }
         }
 	}
 }

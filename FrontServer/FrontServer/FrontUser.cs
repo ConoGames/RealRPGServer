@@ -4,7 +4,7 @@ using FrameworkNamespace;
 
 namespace FrontServer
 {
-    public class FrontUser : Owner
+    public class FrontUser : User
     {
         private string loginToken;
 
@@ -21,7 +21,7 @@ namespace FrontServer
             }
         }
 
-        public FrontUser(IConoConnect connect) : base(connect)
+        public FrontUser(Session session, long userNo, String nickname) : base(session, userNo, nickname)
         {
         }
 
