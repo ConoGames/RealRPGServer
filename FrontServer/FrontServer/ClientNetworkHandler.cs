@@ -21,14 +21,21 @@ namespace FrontServer
                 return;
             }
 
-            FrontSingleton.Instance.
+            String sessionId = Guid.NewGuid().ToString();
 
-			FrontUser user = new FrontUser(connect);
-			user.Connect = connect;
-			connect.SetOwner(user);
+            Session session = new Session(connect, sessionId);
+
+            if(FrontSingleton.Instance.SessionMgr.AddSession(session) == false)
+            {
+                Console.WriteLine("FrontSingleton.Instance.SessionMgr.AddSession(session)");
+
+                return;
+            }
+
+            connect.SetOwner(session);
 
             ClientFrontPacket.ConnectInfoNotifyPacket packet = new ClientFrontPacket.ConnectInfoNotifyPacket();
-            packet.sessionId = user.SessionId;
+            packet.sessionId = session.SessionId;
 
             byte[] data = ClientFrontPacket.Serialize(packet);
 
@@ -37,11 +44,31 @@ namespace FrontServer
 
         public override void Disconnect(ConoConnect connect)
         {
-            throw new NotImplementedException();
+            Session session = connect.Owner as Session;
+
+            if(session == null)
+            {
+                Console.WriteLine("session is null");
+
+                return;
+            }
+
+            FrontSingleton.Instance.SessionMgr.DisconnectSession(session);
+
+            connect.Owner = null;
         }
 
         public override void ReceiveData(ConoConnect connect, byte[] data, int dataLen)
         {
+            Session session = connect.Owner as Session;
+
+            if (session == null)
+            {
+                Console.WriteLine("session is null");
+
+                return;
+            }
+
             Packet packet = ClientFrontPacket.Deserialize(data, dataLen);
 
             int cmd = packet.cmd;
@@ -55,7 +82,29 @@ namespace FrontServer
                 return;
 			}
 
-            networkProcessor.Process(connect, packet);
-		}
+            if (session.StartProcessRequest(packet) == false)
+            {
+                Console.WriteLine("wait to finish processing");
+            }
+            else
+            {
+                while (true)
+                {
+                    networkProcessor.Process(session, packet);
+
+                    packet = session.StartProcessRequest();
+
+                    if (packet != null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+        }
     }
 }

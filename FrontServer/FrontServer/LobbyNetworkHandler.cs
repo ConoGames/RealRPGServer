@@ -15,6 +15,10 @@ namespace FrontServer
 
 		public override void Connect(ConoConnect connect)
 		{
+            String sessionId = Guid.NewGuid().ToString();
+
+            Session session = new Session(connect, sessionId);
+
 			LobbyOwner owner = new LobbyOwner(connect);
 			owner.Connect = connect;
 			connect.SetOwner(owner);

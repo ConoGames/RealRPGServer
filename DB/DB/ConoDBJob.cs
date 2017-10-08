@@ -2,11 +2,11 @@
 {
 	public abstract class ConoDBJob
 	{
-		internal IConoDBUser user;
+		protected IConoDBUser dbUser;
 
-		public ConoDBJob(IConoDBUser user)
+		public ConoDBJob(IConoDBUser dbUser)
 		{
-            this.user = user;
+            this.dbUser = dbUser;
 		}
 
 		public abstract void Process(IConoDBConnection dbConnection);

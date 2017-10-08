@@ -14,10 +14,10 @@ namespace FrontServer
         */
         private FrontManager()
 		{
-            ownerManagers = new OwnerManager[(int)NETWORK_MODULE.NETWORK_MODULE_COUNT];
-			ownerManagers[(int)NETWORK_MODULE.NETWORK_MODULE_LOBBY] = new OwnerManager(300000);
-			ownerManagers[(int)NETWORK_MODULE.NETWORK_MODULE_GAME] = new OwnerManager(300000);
-			ownerManagers[(int)NETWORK_MODULE.NETWORK_MODULE_CLIENT] = new FrontUserManager(300000);
+            sessionMgrs = new SessionManager[(int)NETWORK_MODULE.NETWORK_MODULE_COUNT];
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_LOBBY] = new SessionManager(300000);
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_GAME] = new SessionManager(300000);
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_CLIENT] = new SessionManager(300000);
 		}
 
 		/**

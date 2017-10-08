@@ -6,8 +6,6 @@ namespace FrontServer
 {
     public class FrontUserManager : UserManager
     {
-        private Dictionary<string, FrontUser> loginTokenDict = new Dictionary<string, FrontUser>();
-
 		/**
 		@brief
 		필요한 객체를 생성하는 생성자. 
@@ -17,49 +15,14 @@ namespace FrontServer
             
         }
 
-		public Owner GetFrontUser(string loginToken)
+        public bool AddFrontUser(FrontUser user)
 		{
-            if (loginTokenDict.ContainsKey(loginToken) == false)
-            {
-                return null;
-            }
-
-            return loginTokenDict[loginToken];
-   		}
-
-        public bool AddFrontUser(string loginToken, FrontUser user)
-		{
-			user.DisconnectTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-
-            if (loginTokenDict.ContainsKey(loginToken) == false)
-			{
-				loginTokenDict.Add(loginToken, user);
-
-				return true;
-			}
-			else
-			{
-                if (loginTokenDict[loginToken] == user)
-				{
-					return true;
-				}
-				else
-				{
-					// Todo. dup user exist ( process it )
-					Console.WriteLine("AddConnectUser");
-
-					return false;
-				}
-			}
+            return AddUser(user);
 		}
 
-		public void removeFrontUser(string loginToken)
+		public void removeFrontUser(FrontUser user)
 		{
-            if (loginTokenDict.Remove(loginToken) == false)
-			{
-				Console.WriteLine("removeUser");
-			}
-
+            removeUser(user);
 		}
 
     }

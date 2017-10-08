@@ -12,34 +12,16 @@ namespace FrontServer
         {
         }
 
-        public void Process(IConoConnect connect, Packet packet)
+        public void Process(Session session, Packet packet)
         {
-            FrontUser user = (FrontUser)connect.GetOwner();
+			ClientFrontPacket.LoginReqPacket loginReqPacket = (ClientFrontPacket.LoginReqPacket)packet;
 
-            if (user == null)
-            {
-                Console.WriteLine("???");
-                return;
-            }
+			string loginToken = loginReqPacket.loginToken;
 
-            if (user.startProcessRequest(packet) == false)
-            {
-                Console.WriteLine("????");
-            }
-            else
-            {
-				ClientFrontPacket.LoginReqPacket loginReqPacket = (ClientFrontPacket.LoginReqPacket)packet;
+			DJLogin job = new DJLogin(session);
+            job.LoginToken = loginToken;
 
-				string loginToken = loginReqPacket.loginToken;
-
-                FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_CLIENT).GetOwner();
-
-				DJLogin job = new DJLogin(user);
-                job.LoginToken = loginToken;
-                job.SessionId = user.SessionId;
-
-				ConoDB.Instance.ProcessQuery(job);
-            }
+			ConoDB.Instance.ProcessQuery(job);
         }
     }
 }

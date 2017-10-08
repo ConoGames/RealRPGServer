@@ -1,6 +1,5 @@
 ﻿using System;
 using ConoDBLibrary;
-using ConoNetworkLibrary;
 using MySql.Data.MySqlClient;
 using System.Data;
 using PacketNameSpace;
@@ -11,9 +10,9 @@ namespace FrontServer
     public class DJLogin : ConoDBJob
     {
         private string loginToken;
-        private string sessionId;
+        //private string sessionId;
 
-        public DJLogin(FrontUser user) : base(user)
+        public DJLogin(Session session) : base(session)
         {
             
         }
@@ -23,10 +22,10 @@ namespace FrontServer
 			set { loginToken = value; }
 		}
 
-		public string SessionId
-		{
-			set { sessionId = value; }
-		}
+		//public string SessionId
+		//{
+		//	set { sessionId = value; }
+		//}
 
 		public override void Process(IConoDBConnection dbConnection)
         {
@@ -44,13 +43,13 @@ namespace FrontServer
 
             if(row == null)
             {
-                Console.WriteLine("Process not exist user");
+                Console.WriteLine("not exist user");
 
 			}
             else
             {
 				long userNo = (long)row["accountNo"];
-                //string nickname = (string)row["nickname"];
+                string nickname = (string)row["nickname"];
                 //int exp = (int)row["exp"];
                 //int jam = (int)row["jam"];
                 //int gold = (int)row["gold"];
@@ -60,9 +59,16 @@ namespace FrontServer
 
                 //Console.WriteLine(string.Format("이름 : " + userNo + ", " + nickname + ", " + exp + ", " + jam + ", " + gold + ", " + mileage + ", " + advTicket + ", " + advTicketUseTime.ToLongDateString()));
 
-                ((FrontUser)user).OwnerNo = userNo;
+                FrontUser user = new FrontUser((Session)dbUser, userNo, nickname);
 
-                FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_CLIENT).AddConnectOwner(userNo, (FrontUser)user);
+                if(FrontSingleton.Instance.UserMgr.AddFrontUser(user) == false)
+                {
+                    Console.WriteLine("addUser error");
+
+                    //ToDo. send error Packet to client
+
+                    return;
+                }
 
                 Owner owner = FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_LOBBY).GetFreeOwner();
 

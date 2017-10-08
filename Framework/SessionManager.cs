@@ -4,12 +4,16 @@ using ConoNetworkLibrary;
 
 namespace FrameworkNamespace
 {
-    public class SessionManager
+    public abstract class SessionManager
     {
+        protected OwnerManager ownerMgr;
+
         protected ConcurrentDictionary<String, Session> sessionDict = new ConcurrentDictionary<String, Session>();
         protected ConcurrentQueue<Session> timeoutQueue = new ConcurrentQueue<Session>();
 
         private long deleteTime;
+
+        public abstract void Init();
 
         public SessionManager(long deleteTime)
         {
@@ -46,16 +50,16 @@ namespace FrameworkNamespace
             return session;
         }
 
-        public Session AddSession(Session session)
+        public bool AddSession(Session session)
         {
             if (sessionDict.TryAdd(session.SessionId, session) == false)
             {
                 Console.WriteLine("already exist sessionId - " + session.SessionId);
 
-                return null;
+                return false;
             }
 
-            return session;
+            return true;
         }
 
         public void DisconnectSession(Session session)

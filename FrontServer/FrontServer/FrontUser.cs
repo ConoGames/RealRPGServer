@@ -25,9 +25,9 @@ namespace FrontServer
         {
         }
 
-        public override void delete()
-        {
-            throw new NotImplementedException();
-        }
+        //public override void delete()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

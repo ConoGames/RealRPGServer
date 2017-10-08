@@ -21,6 +21,17 @@ namespace FrontServer
             userMgr = new FrontUserManager();
         }
 
+        public FrontUserManager UserMgr
+        {
+            get { return userMgr; }
+            set { userMgr = value; }
+        }
+
+        public SessionManager SessionMgr
+        {
+            get { return sessionMgr; }
+            set { sessionMgr = value; }
+        }
 
 
         public static FrontSingleton Instance

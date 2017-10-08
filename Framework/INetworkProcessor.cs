@@ -6,6 +6,6 @@ namespace FrameworkNamespace
 {
     public interface INetworkProcessor
     {
-        void Process(IConoConnect connect, Packet packet);
+        void Process(Session session, Packet packet);
     }
 }

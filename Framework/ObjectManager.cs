@@ -3,14 +3,15 @@ namespace FrameworkNamespace
 {
     public class ObjectManager
     {
-        protected OwnerManager[] ownerManagers;
+        protected SessionManager[] sessionMgrs;
+
         private long ownerNo;
 
         public long OwnerNo
         {
             get 
-            { 
-                return ownerNo; 
+            {
+                return ownerNo;
             }
         }
 
@@ -19,9 +20,9 @@ namespace FrameworkNamespace
             ownerNo = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        public OwnerManager GetOwnerManager(int moduleType)
+        public SessionManager GetOwnerManager(int moduleType)
         {
-            return ownerManagers[moduleType];
+            return sessionMgrs[moduleType];
         }
     }
 }

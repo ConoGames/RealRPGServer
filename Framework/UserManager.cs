@@ -44,31 +44,6 @@ namespace FrameworkNamespace
             return user;
         }
 
-        public User CreateUser(Session session, long userNo, string nickname)
-        {
-            //User user = new User(session, userNo, nickname);
-
-            //if (userNoDict.TryAdd(userNo, user) == false)
-            //{
-            //    Console.WriteLine("already exist user - userNo : " + userNo); //debug
-
-            //    return null;
-            //}
-
-            //if (nicknameDict.TryAdd(nickname, user) == false)
-            //{
-            //    Console.WriteLine("already exist user - nickname : " + nickname); //error
-
-            //    userNoDict.TryRemove(userNo, out user);
-
-            //    return null;
-            //}
-
-            //return user;
-
-            return null;
-        }
-
         public bool AddUser(User user)
         {
             if (userNoDict.TryAdd(user.UserNo, user) == false)
@@ -90,12 +65,17 @@ namespace FrameworkNamespace
             return true;
         }
 
-        //public void removeFrontUser(string loginToken)
-        //{
-        //          if (loginTokenDict.Remove(loginToken) == false)
-        //	{
-        //		Console.WriteLine("removeUser");
-        //	}
-        //}
+        public void removeUser(User user)
+        {
+            if (userNoDict.TryRemove(user.UserNo, out user) == false)
+            {
+                Console.WriteLine("already exist user - userNo : " + user.UserNo); //error
+            }
+
+            if (nicknameDict.TryRemove(user.Nickname, out user) == false)
+            {
+                Console.WriteLine("already exist user - nickname : " + user.Nickname); //error
+            }
+        }
     }
 }

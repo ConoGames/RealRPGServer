@@ -11,7 +11,7 @@ namespace FrontServer
         {
         }
 
-        public void Process(IConoConnect connect, Packet packet)
+        public void Process(Session session, Packet packet)
         {
             FrontLobbyPacket.ConnectReqPacket crPacket = (FrontLobbyPacket.ConnectReqPacket)packet;
 

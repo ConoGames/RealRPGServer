@@ -30,10 +30,6 @@ namespace FrameworkNamespace
             this.sessionId = sessionId;
             user = null;
             this.connect = connect;
-            if (connect != null)
-            {
-                connect.SetOwner(this);
-            }
 
             toSendQueue = new Queue<Packet>();
         
@@ -77,17 +73,12 @@ namespace FrameworkNamespace
             get { return isProcessing; }
         }
 
-		public bool startProcessRequest(Packet packet)
+		public bool StartProcessRequest(Packet packet)
 		{
             lock (processLock)
             {
                 if (isProcessing || toProcessQueue.Count != 0)
                 {
-                    if(isProcessing && toProcessQueue.Count != 0)
-                    {
-                        Console.WriteLine("is processing");
-                    }
-
                     toProcessQueue.Enqueue(packet);
 
                     return false;
@@ -101,23 +92,41 @@ namespace FrameworkNamespace
             }
 		}
 
-		public Packet finishProcessRequest()
-		{
+        public void FinishProcessRequest()
+        {
             Packet packet = null;
 
             lock (processLock)
             {
-                if (toProcessQueue.Count == 0)
+                isProcessing = false;
+            }
+        }
+
+
+        public Packet StartProcessRequest()
+        {
+            Packet packet = null;
+
+            lock (processLock)
+            {
+                if(IsProcessing)
                 {
-					isProcessing = false;
-				}
+                    return null;
+                }
                 else
                 {
-                    packet = toProcessQueue.Dequeue();
+                    if(toProcessQueue.Count == 0)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        packet = toProcessQueue.Dequeue();
+                    }
                 }
             }
 
-			return packet;
+            return packet;
         }
-	}
+    }
 }
