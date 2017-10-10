@@ -4,7 +4,7 @@ using FrameworkNamespace;
 
 namespace FrontServer
 {
-    public class LobbyOwner : Owner
+    public class LobbyOwner : ServerOwner
     {
 		private string clientIp; ///< ip
 		private int clientPort; ///< port
@@ -32,11 +32,11 @@ namespace FrontServer
 			}
 		}
 
-        public LobbyOwner(IConoConnect connect) : base(connect)
+        public LobbyOwner(Session session, long ownerNo) : base(session, ownerNo)
         {
         }
 
-        public override void delete()
+        public override void Delete()
         {
             throw new NotImplementedException();
         }

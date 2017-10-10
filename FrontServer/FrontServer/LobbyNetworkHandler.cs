@@ -19,13 +19,18 @@ namespace FrontServer
 
             Session session = new Session(connect, sessionId);
 
-			LobbyOwner owner = new LobbyOwner(connect);
-			owner.Connect = connect;
-			connect.SetOwner(owner);
+            if(FrontManager.Instance.GetSessionManager((int)NETWORK_MODULE.NETWORK_MODULE_LOBBY).AddSession(session) == false)
+            {
+                Console.WriteLine("add lobby session fail");
+
+                return;
+            }
+
+            connect.Owner = session;
 
             FrontLobbyPacket.ConnectResPacket packet = new FrontLobbyPacket.ConnectResPacket();
             packet.serverNo = FrontManager.Instance.OwnerNo;
-            packet.sessionId = "0";
+            packet.sessionId = sessionId;
 
             byte[] data = FrontLobbyPacket.Serialize(packet);
 
@@ -41,7 +46,16 @@ namespace FrontServer
 
 		public override void ReceiveData(ConoConnect connect, byte[] data, int dataLen)
 		{
-			Packet packet = FrontLobbyPacket.Deserialize(data, dataLen);
+            Session session = connect.Owner as Session;
+
+            if (session == null)
+            {
+                Console.WriteLine("session is null");
+
+                return;
+            }
+
+            Packet packet = FrontLobbyPacket.Deserialize(data, dataLen);
 
 			int cmd = packet.cmd;
 
@@ -54,7 +68,7 @@ namespace FrontServer
 				return;
 			}
 
-			networkProcessor.Process(connect, packet);
+			networkProcessor.Process(session, packet);
 		}
     }
 }

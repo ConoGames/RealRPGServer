@@ -20,9 +20,14 @@ namespace FrameworkNamespace
             ownerNo = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        public SessionManager GetOwnerManager(int moduleType)
+        public SessionManager GetSessionManager(int moduleType)
         {
             return sessionMgrs[moduleType];
+        }
+
+        public OwnerManager GetOwnerManager(int moduleType)
+        {
+            return sessionMgrs[moduleType].OwnerMgr;
         }
     }
 }

@@ -20,12 +20,19 @@ namespace FrontServer
             string ip = crPacket.clientIp;
             int port = crPacket.clientPort;
 
-            LobbyOwner owner = (LobbyOwner)connect.GetOwner();
+            LobbyOwner owner = new LobbyOwner(session, serverNo);
 
             owner.ClientIp = ip;
             owner.ClientPort = port;
 
-            FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_LOBBY).AddConnectOwner(serverNo, owner);
+            if(((ServerOwnerManager)(FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_LOBBY))).AddOwner(owner) == false)
+            {
+                Console.WriteLine("add fail");
+
+                //ToDo. send fail packet
+
+                return;
+            }
         }
     }
 }

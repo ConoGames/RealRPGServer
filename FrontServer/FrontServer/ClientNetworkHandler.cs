@@ -25,7 +25,7 @@ namespace FrontServer
 
             Session session = new Session(connect, sessionId);
 
-            if(FrontSingleton.Instance.SessionMgr.AddSession(session) == false)
+            if(FrontManager.Instance.GetSessionManager((int)NETWORK_MODULE.NETWORK_MODULE_CLIENT).AddSession(session) == false)
             {
                 Console.WriteLine("FrontSingleton.Instance.SessionMgr.AddSession(session)");
 
@@ -53,7 +53,7 @@ namespace FrontServer
                 return;
             }
 
-            FrontSingleton.Instance.SessionMgr.DisconnectSession(session);
+            FrontManager.Instance.GetSessionManager((int)NETWORK_MODULE.NETWORK_MODULE_CLIENT).DisconnectSession(session);
 
             connect.Owner = null;
         }
@@ -82,29 +82,23 @@ namespace FrontServer
                 return;
 			}
 
-            if (session.StartProcessRequest(packet) == false)
+            session.AddRequest(packet);
+
+            while (true)
             {
-                Console.WriteLine("wait to finish processing");
-            }
-            else
-            {
-                while (true)
+                packet = session.StartProcessRequest();
+
+                if (packet != null)
                 {
                     networkProcessor.Process(session, packet);
 
-                    packet = session.StartProcessRequest();
-
-                    if (packet != null)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    continue;
+                }
+                else
+                {
+                    break;
                 }
             }
-
         }
     }
 }

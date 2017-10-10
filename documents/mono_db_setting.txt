@@ -1,0 +1,10 @@
+mysql connector 다운
+
+압축 풀고 프로젝트 폴더로 폴더채로 이동
+
+참조에 등록
+
+참조에서 System.Data, (System) 이거 반드시 추가해야 컴파일됨.
+
+socket 패키지 검색후 추가
+litjson 패키지 검색후 추가

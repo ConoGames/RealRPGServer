@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace FrameworkNamespace
 {
-    public class UserManager
+    public class UserManager : OwnerManager
     {
         private ConcurrentDictionary<long, User> userNoDict = new ConcurrentDictionary<long, User>();
         private ConcurrentDictionary<string, User> nicknameDict = new ConcurrentDictionary<string, User>();
@@ -44,8 +44,44 @@ namespace FrameworkNamespace
             return user;
         }
 
-        public bool AddUser(User user)
+        //public bool AddUser(User user)
+        //{
+        //    if (userNoDict.TryAdd(user.UserNo, user) == false)
+        //    {
+        //        Console.WriteLine("already exist user - userNo : " + user.UserNo); //debug
+
+        //        return false;
+        //    }
+
+        //    if (nicknameDict.TryAdd(user.Nickname, user) == false)
+        //    {
+        //        Console.WriteLine("already exist user - nickname : " + user.Nickname); //error
+
+        //        userNoDict.TryRemove(user.UserNo, out user);
+
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+        //public void removeUser(User user)
+        //{
+        //    if (userNoDict.TryRemove(user.UserNo, out user) == false)
+        //    {
+        //        Console.WriteLine("already exist user - userNo : " + user.UserNo); //error
+        //    }
+
+        //    if (nicknameDict.TryRemove(user.Nickname, out user) == false)
+        //    {
+        //        Console.WriteLine("already exist user - nickname : " + user.Nickname); //error
+        //    }
+        //}
+
+        public bool AddOwner(Owner owner)
         {
+            User user = owner as User;
+
             if (userNoDict.TryAdd(user.UserNo, user) == false)
             {
                 Console.WriteLine("already exist user - userNo : " + user.UserNo); //debug
@@ -65,8 +101,10 @@ namespace FrameworkNamespace
             return true;
         }
 
-        public void removeUser(User user)
+        public void RemoveOwner(Owner owner)
         {
+            User user = owner as User;
+
             if (userNoDict.TryRemove(user.UserNo, out user) == false)
             {
                 Console.WriteLine("already exist user - userNo : " + user.UserNo); //error

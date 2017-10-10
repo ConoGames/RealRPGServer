@@ -4,7 +4,7 @@ using ConoNetworkLibrary;
 
 namespace FrameworkNamespace
 {
-    public abstract class SessionManager
+    public class SessionManager
     {
         protected OwnerManager ownerMgr;
 
@@ -13,7 +13,13 @@ namespace FrameworkNamespace
 
         private long deleteTime;
 
-        public abstract void Init();
+        //public abstract void Init();
+
+        public OwnerManager OwnerMgr
+        {
+            get { return ownerMgr; }
+            set { ownerMgr = value; }
+        }
 
         public SessionManager(long deleteTime)
         {

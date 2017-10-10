@@ -10,7 +10,6 @@ namespace FrontServer
     public class DJLogin : ConoDBJob
     {
         private string loginToken;
-        //private string sessionId;
 
         public DJLogin(Session session) : base(session)
         {
@@ -21,11 +20,6 @@ namespace FrontServer
 		{
 			set { loginToken = value; }
 		}
-
-		//public string SessionId
-		//{
-		//	set { sessionId = value; }
-		//}
 
 		public override void Process(IConoDBConnection dbConnection)
         {
@@ -49,7 +43,7 @@ namespace FrontServer
             else
             {
 				long userNo = (long)row["accountNo"];
-                string nickname = (string)row["nickname"];
+                //string nickname = (string)row["nickname"];
                 //int exp = (int)row["exp"];
                 //int jam = (int)row["jam"];
                 //int gold = (int)row["gold"];
@@ -59,9 +53,11 @@ namespace FrontServer
 
                 //Console.WriteLine(string.Format("이름 : " + userNo + ", " + nickname + ", " + exp + ", " + jam + ", " + gold + ", " + mileage + ", " + advTicket + ", " + advTicketUseTime.ToLongDateString()));
 
-                FrontUser user = new FrontUser((Session)dbUser, userNo, nickname);
+                FrontUser user = new FrontUser((Session)dbUser, userNo);
 
-                if(FrontSingleton.Instance.UserMgr.AddFrontUser(user) == false)
+                FrontUserManager frontUserManager = FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_CLIENT) as FrontUserManager;
+
+                if (frontUserManager.AddFrontUser(user) == false)
                 {
                     Console.WriteLine("addUser error");
 
@@ -70,35 +66,32 @@ namespace FrontServer
                     return;
                 }
 
-                Owner owner = FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_LOBBY).GetFreeOwner();
+                ServerOwnerManager lobbyOwnerMgr = FrontManager.Instance.GetOwnerManager((int)NETWORK_MODULE.NETWORK_MODULE_LOBBY) as ServerOwnerManager;
+
+                Owner owner = lobbyOwnerMgr.GetFreeOwner();
 
                 if(owner == null)
                 {
                     Console.WriteLine("lobby owner");
 
-                    FrontUser frontUser = (FrontUser)user;
+                    FrontUser frontUser = user as FrontUser;
 
                     //frontUser.Connect.Send();
 
                     return;
                 }
 
+                Session session = dbUser as Session;
+
                 FrontLobbyPacket.EnterUserReqPacket packet = new FrontLobbyPacket.EnterUserReqPacket();
 
 				packet.userNo = userNo;
-                packet.sessionId = sessionId;
+                packet.sessionId = session.SessionId;
 				
                 byte[] data = FrontLobbyPacket.Serialize(packet);
 
-                owner.Connect.Send(data, data.Length);
+                session.Connect.Send(data, data.Length);
 			}
-
-
-			//foreach (DataRow row in ds.Tables[0].Rows)
-			//{
-			
-
-			//}
 		}
     }
 }

@@ -2,7 +2,7 @@
 
 namespace FrameworkNamespace
 {
-    public abstract class User : BaseUser
+    public abstract class User : Owner
     {
         protected long userNo;
         protected String nickname;

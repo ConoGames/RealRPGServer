@@ -4,7 +4,7 @@ using FrameworkNamespace;
 
 namespace FrontServer
 {
-    public class FrontUser : User
+    public class FrontUser : Account
     {
         private string loginToken;
 
@@ -21,13 +21,13 @@ namespace FrontServer
             }
         }
 
-        public FrontUser(Session session, long userNo, String nickname) : base(session, userNo, nickname)
+        public FrontUser(Session session, long userNo) : base(session, userNo)
         {
         }
 
-        //public override void delete()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public override void Delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

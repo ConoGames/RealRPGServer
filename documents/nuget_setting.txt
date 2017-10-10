@@ -1,0 +1,6 @@
+json.net
+microsoft async
+mysql 다운후 packages에 넣고 참조하기(4.5)
+system
+system.data
+

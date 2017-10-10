@@ -9,7 +9,7 @@ namespace FrameworkNamespace
     public class Session : IConoOwner, IConoDBUser
 	{
 		protected String sessionId;
-		protected BaseUser user;
+		protected Owner owner;
 		protected IConoConnect connect;
         protected Queue<Packet> toSendQueue;
 
@@ -28,7 +28,7 @@ namespace FrameworkNamespace
         public Session(IConoConnect connect, String sessionId)
 		{
             this.sessionId = sessionId;
-            user = null;
+            owner = null;
             this.connect = connect;
 
             toSendQueue = new Queue<Packet>();
@@ -56,10 +56,10 @@ namespace FrameworkNamespace
 			set { connect = value; }
 		}
 
-		public BaseUser User
+		public Owner Owner
 		{
-            get { return user; }
-			set { user = value; }
+            get { return owner; }
+			set { owner = value; }
 		}
 
 		public long DisconnectTime
@@ -92,10 +92,16 @@ namespace FrameworkNamespace
             }
 		}
 
+        public void AddRequest(Packet packet)
+        {
+            lock (processLock)
+            {
+                toProcessQueue.Enqueue(packet);
+            }
+        }
+
         public void FinishProcessRequest()
         {
-            Packet packet = null;
-
             lock (processLock)
             {
                 isProcessing = false;
@@ -122,6 +128,8 @@ namespace FrameworkNamespace
                     else
                     {
                         packet = toProcessQueue.Dequeue();
+
+                        isProcessing = true;
                     }
                 }
             }

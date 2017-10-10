@@ -6,11 +6,11 @@ namespace FrontServer
 {
 	public class GameOwner : Owner
 	{
-		public GameOwner(IConoConnect connect) : base(connect)
+		public GameOwner(Session session) : base(session)
 		{
 		}
 
-		public override void delete()
+		public override void Delete()
 		{
 			throw new NotImplementedException();
 		}

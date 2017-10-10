@@ -1,0 +1,21 @@
+<mono 설치법>
+
+$ sudo su
+$ mkdir -p /tmp/mono_dependencies
+$ cd /tmp/mono_dependencies
+$ wegt http://dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Everything/x86_64/os/Packages/l/libpng15-1.5.28-2.fc26.x86_64.rpm
+$ yum install libpng15-1.5.28-2.fc26.x86_64.rpm
+$ yum install yum-utils
+$ rpm --import "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF"
+$ yum-config-manager --add-repo http://download.mono-project.com/repo/centos/
+$ yum clean all
+$ yum makecache
+$ yum install mono-complete
+
+
+<컴파일 및 실행>
+
+$ mcs -t:[library] [MyFile.cs]
+$ mcs -r:[library.dll] [MyFile.cs]
+$ mcs -r:[library.dll] [MyFile.cs]
+$ mono [MyFile.exe]

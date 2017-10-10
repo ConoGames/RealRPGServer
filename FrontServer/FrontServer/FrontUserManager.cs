@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FrontServer
 {
-    public class FrontUserManager : UserManager
+    public class FrontUserManager : AccountManager
     {
 		/**
 		@brief
@@ -17,12 +17,12 @@ namespace FrontServer
 
         public bool AddFrontUser(FrontUser user)
 		{
-            return AddUser(user);
+            return AddOwner(user);
 		}
 
-		public void removeFrontUser(FrontUser user)
+		public void RemoveFrontUser(FrontUser user)
 		{
-            removeUser(user);
+            RemoveOwner(user);
 		}
 
     }

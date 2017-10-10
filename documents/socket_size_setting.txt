@@ -1,0 +1,62 @@
+<최대 소켓 연결 갯수 보는 법>
+sudo more /proc/sys/fs/file-max
+sudo sysctl -a | grep fs.file-max
+
+sudo lsof -p 2687 | wc -l
+
+<지금 연결된 소켓 연결 갯수 보는 법>
+lsof | wc -l
+
+sudo sysctl -p
+
+<늘리는법>
+vi /etc/security/limits.conf
+* soft nofile 60000
+* hard nofile 60000
+
+<늘리기 링크>
+https://glassonionblog.wordpress.com/2013/01/27/increase-ulimit-and-file-descriptors-limit/
+
+<늘리기 전체>
+Increasing ulimit and file descriptors limit on Linux
+Posted on January 27, 2013 by badc0da
+Getting “too many open files” errors? Here is how to increase ulimit and file descriptors settings on Linux
+
+file-max is the maximum File Descriptors (FD). It is a kernel setting enforced at the system level. ulimit is enforced at the user level. It should be configured to be less than file-max.
+
+Default settings for ulimit and file-max on a Linux system assume that several users (not applications) would share the system.  These settings limit the number of resources used by each user. The default settings are  very low for high performance servers and should be increased.
+
+To change the file descriptor setting, edit the kernel parameter file /etc/sysctl.conf. Add line fs.file-max=[new value] to it.
+
+# vi /etc/sysctl.conf
+fs.file-max = 500000
+Apply the changes:
+
+#sudo sysctl -p
+To change the ulimit setting, edit the file /etc/security/limits.conf and set the hard and soft limits.
+
+# vi /etc/security/limits.conf
+* soft nofile 60000
+* hard nofile 60000
+Apply the changes:
+
+# sudo reboot
+Now test the new system settings using the following commands:
+
+# sodo ulimit -a
+open files (-n) 60000
+Check the current open file descriptor limit:
+
+# more /proc/sys/fs/file-max
+500000
+Another way to check the file descriptor limit:
+
+# sysctl -a | grep fs.file-max
+fs.file-max = 500000
+To find out how many file descriptors are currently being used:
+
+# more /proc/sys/fs/file-nr
+To find out how many files are currently open:
+
+# lsof | wc -l
+

@@ -11,7 +11,7 @@ namespace FrontServer
 		{
 		}
 
-		public void Process(IConoConnect connect, Packet packet)
+		public void Process(Session session, Packet packet)
 		{
             FrontLobbyPacket.EnterUserResPacket eurPacket = (FrontLobbyPacket.EnterUserResPacket)packet;
 

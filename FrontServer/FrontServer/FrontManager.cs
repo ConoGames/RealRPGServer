@@ -16,15 +16,21 @@ namespace FrontServer
 		{
             sessionMgrs = new SessionManager[(int)NETWORK_MODULE.NETWORK_MODULE_COUNT];
             sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_LOBBY] = new SessionManager(300000);
-            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_GAME] = new SessionManager(300000);
-            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_CLIENT] = new SessionManager(300000);
-		}
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_LOBBY].OwnerMgr = new ServerOwnerManager();
 
-		/**
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_GAME] = new SessionManager(300000);
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_GAME].OwnerMgr = new ServerOwnerManager();
+
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_CLIENT] = new SessionManager(300000);
+            sessionMgrs[(int)NETWORK_MODULE.NETWORK_MODULE_CLIENT].OwnerMgr = new FrontUserManager();
+
+        }
+
+        /**
         @brief
         싱글톤 객체를 부르는 함수
         */
-		public static FrontManager Instance
+        public static FrontManager Instance
 		{
 			get
 			{
